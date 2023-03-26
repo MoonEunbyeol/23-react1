@@ -52,7 +52,7 @@
 
 \* 리액트 컴포넌트 예시 : 에어비앤비
 
-<img src="https://github.com/MoonEunbyeol/23-React1/blob/master/image/3week/airbnb_01.png" width="300"/> <img src="https://github.com/MoonEunbyeol/23-React1/blob/master/image/3week/airbnb_02.png" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/3week/airbnb_01.png" width="300"/> <img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/3week/airbnb_02.png" width="300"/>
 
 **재사용성** : 다시 사용이 가능한 성질. 리액트는 컴포넌트 기반의 구조 => 각 컴포넌트들은 웹사이트의 여러 곳에서 반복적으로 사용. 재사용이 가능하려면 해당 모듈의 의존성이 없어야 함.
 1. 전체 소프트웨어 개발 기간 단축
@@ -129,7 +129,7 @@ root.render(e(LikeButton));
 
 **결과** : 
 
-<img src="https://github.com/MoonEunbyeol/23-React1/blob/master/image/3week/practiceResult.png" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/3week/practiceResult.png" width="300"/>
 
 
 
