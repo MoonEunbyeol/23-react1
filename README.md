@@ -2,6 +2,105 @@
 <br>
 
 ## 03.23 4주차
+### 📚 JSX
+**JSX (JavaScript XML)** : JavaScript의 확장 문법으로 JavaScript와 XML/HTML을 합친 것
+
+<br>
+
+### 📚 JSX의 역할
+* JSX는 내부적으로 XML/HTML 코드를 자바스크립트로 변환
+* React가 createElement 함수를 사용하여 자동으로 자바스크립트로 변환
+* 만일 JS로 작업할 경우 직접 createElement 함수를 사용
+> JSX를 사용했을 때 코드가 더욱 간결해지고 생산성과 가독성이 올라감
+
+<br>
+
+### 📚 JSX의 장점
+* 코드가 간결해짐
+* 가독성 향상
+* Injection Attack이라 불리는 해킹 방법을 방어함 -> 보안성이 올라감
+
+<br>
+
+### 📚 JSX 사용법
+* 모든 자바스크립트 문법을 지원 (추가로 XML과 HTML을 섞어서 사용)
+<br>\* XML/HTML 코드를 사용하다가 중간에 자바스크립트 코드를 사용하고 싶으면 중괄호를 써서 묶어주면 됨
+```js
+const name = "이름";
+const element = <h1>안녕, {name}</h1>l
+
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+)
+``` 
+* 태그의 속성값을 넣고 싶을 때는 큰따옴표 사이에 문자열을 넣거나 중괄호 사이에 JS 코드를 넣으면 됨
+```js
+const element = <div tabIndex="0"></div>
+const element = <img src={user.avatarUrl}></img>
+```
+
+<br>
+
+### 💻 실습
+**Book.jsx**
+```js
+import React from "react"
+
+function Book(props) {
+  return (
+    <div>
+      <h1>{`이 책의 이름은 ${props.name}입니다.`}</h1>
+      <h2>{`이 책은 총 ${props.numOfPage}페이지로 이뤄져 있습니다.`}</h2>
+    </div>
+  )
+}
+
+export default Book;
+```
+**Library.jsx**
+```js
+import React from "react";
+import Book from "./Book";
+
+function Library(props) {
+  return (
+    <div>
+      <Book name="처음 만난 파이썬" numOfPage={300}></Book>
+      <Book name="처음 만난 AWS" numOfPage={400}></Book>
+      <Book name="처음 만난 리액트" numOfPage={500}></Book>
+    </div>
+  )
+}
+
+export default Library;
+```
+**Index.js**
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import Library from './chapter_03/Library';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Library />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/4week/index.js_result.PNG" width="300"/>
 
 <br><hr><br>
 
