@@ -49,7 +49,6 @@ React.createElement(
 <br>
 
 ### 📚 엘리먼트 렌더링하기
-
 **root DOM node** : id값이 root인 div태그로 단순하지만 리액트에 필수로 들어가는 중요한 코드. 이 div태그 안에 있는 모든 것이 리액트 DOM에 의해서 관리. 
 ```html
 <div id="root"></div>
@@ -57,7 +56,7 @@ React.createElement(
 
 **엘리먼트 렌더링** : render() 함수를 사용. Virtual DOM에서 실제 DOM으로 이동하는 과정
 1. 첫 번째 파라미터 : 출력할 리액트 엘리먼트
-1. 두 번째 파라미터 : 출력할 타켓
+1. 두 번째 파라미터 : 출력할 타겟
 ```js
 const element = <h1>안녕, 리액트!</h1>;
 ReactDOM.render(element, document.getElementById('root));
@@ -66,7 +65,6 @@ ReactDOM.render(element, document.getElementById('root));
 <br>
 
 ### 📚 렌더링된 엘리먼트 업데이트하기
-
 **엘리먼트 업데이트** : 기존 엘리먼트를 변경하는 것이 아니라 새로운 엘리먼트를 생성해서 바꿔치기하는 것
 
 **실습 코드** : 교재와는 상이. CDN 링크 및 babel 사용
@@ -109,7 +107,7 @@ ReactDOM.render(element, document.getElementById('root));
 
 <br>
 
-### 📚 (실습) 시계 만들기
+### 💻 실습 : 시계 만들기
 **Clock.jsx**
 ```jsx
 import React from "react";
@@ -151,6 +149,132 @@ reportWebVitals();
 **결과** : 
 
 <img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/5week/4.4_index.js_result.PNG" width="300"/>
+
+<br>
+
+### 📚 컴포넌트
+**컴포넌트** : 
+- 컴포넌트 기반 : 작은 컴포넌트가 모여 큰 컴포넌트를 구성하고, 다시 이런 컴포넌트들이 모여서 구성한다는 것을 의미
+- 컴포넌트 재사용이 가능하기 때문에 전체 코드의 양을 줄일 수 있어 개발 시간과 유지 보수 비용 절감 가능
+- 컴포넌트는 자바스크립트 함수와 입력과 출력이 있다는 면에서 유사하나 입력은 Prps가 담당하고, 출력은 리액트 엘리먼트의 형태로 출력
+- 엘리먼트를 필요한 만큼 만들어 사용한다는 면에서는 객체 지향의 개념과 비슷
+
+**리액트 컴포넌트 역할** : 어떠한 속성들을 입력으로 받아서 그에 맞는 리액트 엘리먼트를 생성하여 리턴해주는 것
+
+<br>
+
+### 📚 Props
+**Props의 개념** : 
+- prop(property : 속성, 특성)의 준말로 컴포넌트의 속성을 의미
+- 컴포넌트에 어떤 속성, props를 넣느냐에 따라서 속성이 다른 엘리먼트가 출력
+- 컴포넌트에 전달 할 다양한 정보를 담고 있는 자바스크립트 객체
+
+**Props의 특징** : 읽기 전용으로 변경할 수 없음. 속성이 다른 엘리먼트를 생성하려면 새로운 props를 컴포넌트에 전달
+
+\* Pure함수 : 인수로 받은 정보가 함수 내부에서도 변하지 않는 함수<br> 　Impure함수 : 인수로 받은 정보가 함수 내부에서 변하는 함수
+
+> 모든 리액트 컴포넌트는 그들의 props에 관해서는 Pure 함수 같은 역할을 해야 한다.
+
+**Props 사용법** : JSX에서는 key-value(키-값)쌍의 형태로 컴포넌트에 props를 넣을 수 있음
+```jsx
+function App(props) {
+  return (
+    <Profile
+      name="홍길동"
+      introduction="안녕하세요, 홍길동입니다."
+      viewCount={1500}
+    />
+  );
+}
+```
+\* App 컴포넌트에서 props를 인자로 받아 내부의 Profile 컴포넌트로 전달해서 name, introduction, viewCount에 각각 속성을 할당. 이때 전달되는 props는 아래 코드와 같은 자바스크립트 객채
+```js
+{
+  name: "홍길동",
+  introduction: "안녕하세요, 홍길동입니다.",
+  viewCount: 1500
+}
+```
+
+**JSX를 사용하지 않는 경우 props의 전달 방법** : createElement() 함수 사용
+```js
+React.createElement(
+  Profile,
+  {
+    name: "홍길동",
+    iintroduction: "안녕하세요, 홍길동입니다.".
+    viewCount: 1500
+  },
+  null
+);
+```
+
+<br>
+
+### 📚 컴포넌트 생성
+**컴포넌트의 종류** :
+- 리액트 초기 버전에서는 클래스 컴포넌트를 주로 사용
+- 이후 Hook이라는 개념이 나오면서 최근에는 함수형 컴포넌트를 주로 사용
+
+**함수형 컴포넌트** : Welcome 함수의 경우 하나의 props 객체를 받아서 인사말이 담긴 리액트 엘리먼트를 리턴
+```js
+function Welcome(props) {
+  return <h1>안녕, {props.name}</h1>
+}
+```
+
+**클래스형 컴포넌트** : 리액트의 모든 클래스 컴포넌트는 React.Component를 상속받아서 만듦
+```js
+class Welcom extends React.Component {
+  render() {
+    return <h1>안녕, {this.props.name}</h1>;
+  }
+}
+```
+
+**컴포넌트 이름 짓기** : 컴포넌트 이름은 항상 대문자로 시작. 리액트는 소문자로 시작하는 컴포넌트를 DOM 태그로 인식하기 때문
+\* 컴포넌트 파일 이름과 컴포넌트 이름은 같게 함.
+
+**컴포넌트의 렌더링** : 최종적으로 React DOM을 통해 실제 DOM에 효과적으로 업데이트 = 실제 브라우저를 통해서 볼 수 있음
+```js
+function Welcome(props) {
+  return <h1>안녕, {props.name}</h1>
+}
+
+const element = <Welcome name="인제" />;
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+```
+
+<br>
+
+### 📚 컴포넌트 합성
+**컴포넌트 합성** : 
+- 여러 개의 컴포넌트를 합쳐서 하나의 컴포넌트를 만드는 것
+- 리액트에서는 컴포넌트 안에 또 다른 컴포넌트를 사용할 수 있기 때문에, 복잡한 화면을 여러 개의 컴포넌트로 나누어 구현 가능
+```js
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>
+}
+
+function App(props) {
+  return (
+    <div>
+      <Welcome name="Mike" />
+      <Welcome name="Steve" />
+      <Welcome name="Jane" />
+    </div>
+  )
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+```
+\* App 컴포넌트 안에 3개의 Welcome 컴포넌트가 있고, 각각의 Welcome 컴포넌트는 각기 다른 props를 가지고 있음 = App 컴포넌트를 root로 해서 하위 컴포넌트들이 존재하는 형태로 리액트로만 구성된 앱의 기본적인 구조
 
 <br><hr><br>
 
