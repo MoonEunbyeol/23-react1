@@ -1,6 +1,161 @@
 # 202130114 문은별
 <br>
 
+## 03.30 5주차
+### 📚 엘리먼트
+> Elements are the smallest building blocks of React apps. <br>
+엘리먼트는 리액트 앱의 가장 작은 빌딩 블록들
+
+**Element** : 리액트 앱을 구성하는 요소. 웹사이트의 경우 DOM 엘리먼트이며 HTML 요소를 의미
+
+**리액트 엘리먼트와 DOM엘리먼트의 차이** : 리액트 엘리먼트는 Virtual DOM의 형태. DOM 엘리먼트는 페이지의 모든 정보를 가지고 있어 무거우나 리액트 엘리먼트는 변화한 부분만 갖고 있어 가벼움
+
+|구분|DOM|Virtual DOM|
+|:---:|:---|:---|
+|업데이트 속도|느림|빠름|
+|element 업데이트 방식|DOM 전체를 업데이트|변화 부분을 가상 DOM으로 만든 후 DOM과 비교하여 다른 부분만 업데이트|
+|메모리|낭비가 심함|효율적|
+
+**엘리먼트의 생김새** : 리액트 엘리먼트는 자바스크립트 객체 형태로 존재. 컴포넌트, 속성 및 내부의 모든 자식(children)에 대한 정보를 포함하고 있는 일반적인 자바스크립트 객체. 이 객체는 마음대로 변경할 수 없는 불변성을 갖고 있음.
+
+```js
+{
+  type: Button, //컴포넌트 이름
+  props: {
+    color: 'green',
+    children: 'Hello, element!'
+  }
+}
+```
+\* 리액트 엘리먼트는 JS 객체 형태로 존재. 이 객체를 만드는 역할을 하는 것이 createElement() 함수
+
+**createElement()** : 내부적으로 자바스크립트 객체를 만드는 역할을 하는 함수
+1. 첫 번째 매개변수 : type. 이 곳에 태그가 들어가면 그대로 표현, 만일 리액트 컴포넌트가 들어가면 이 것을 분해해 태그로 만들게 됨.
+1. 두 번째 매개변수 : props. 속성
+1. 세 번째 매개변수 : children. 자식 태그
+
+```js
+React.createElement(
+  type,
+  [props],
+  [...children]
+)
+```
+
+**엘리먼트의 특징** : 불변성. 즉 한 번 생성된 엘리먼트의 children이나 attributes(속성)을 바꿀 수 없음.
+
+* 만일 내용이 바뀌면 : 컴포넌트를 통해 새로운 엘리먼트를 생성 -> 이전 엘리먼트와 교체를 하는 방법으로 내용을 바꿈. 이렇게 교체하는 작업을 위해 Virtual DOM을 사용
+
+<br>
+
+### 📚 엘리먼트 렌더링하기
+
+**root DOM node** : id값이 root인 div태그로 단순하지만 리액트에 필수로 들어가는 중요한 코드. 이 div태그 안에 있는 모든 것이 리액트 DOM에 의해서 관리. 
+```html
+<div id="root"></div>
+```
+
+**엘리먼트 렌더링** : render() 함수를 사용. Virtual DOM에서 실제 DOM으로 이동하는 과정
+1. 첫 번째 파라미터 : 출력할 리액트 엘리먼트
+1. 두 번째 파라미터 : 출력할 타켓
+```js
+const element = <h1>안녕, 리액트!</h1>;
+ReactDOM.render(element, document.getElementById('root));
+```
+
+<br>
+
+### 📚 렌더링된 엘리먼트 업데이트하기
+
+**엘리먼트 업데이트** : 기존 엘리먼트를 변경하는 것이 아니라 새로운 엘리먼트를 생성해서 바꿔치기하는 것
+
+**실습 코드** : 교재와는 상이. CDN 링크 및 babel 사용
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!--8~10행 스크립트 추가. 헤드나 바디에 넣어도 상관 X / Babel-->
+</head>
+<body>
+  <div id="root"></div>
+
+  <!--실행 스크립트-->
+  <script type="text/babel">
+    function tick() {
+      const element = (
+        <div>
+          <h1>안녕, 리액트!</h1>
+          <h2>현재 시간 : {new Date().toLocaleTimeString()}</h2>
+        </div>
+      );
+      ReactDOM.render(element, document.getElementById("root"));
+    }
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/5week/clock.html_result.PNG" width="300"/>
+
+<br>
+
+### 📚 (실습) 시계 만들기
+**Clock.jsx**
+```jsx
+import React from "react";
+
+function Clock(props) {
+  return (
+    <div>
+      <h1>안녕, 리액트! (4.4 실습)</h1>
+      <h2>현재 시간 : {new Date().toLocaleTimeString()}</h2>
+    </div>
+  );
+}
+
+export default Clock;
+```
+**Index.js**
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import Clock from './chapter_04/Clock';
+
+setInterval(() => {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <React.StrictMode>
+    <Clock />
+  </React.StrictMode>
+  );
+}, 1000);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/5week/4.4_index.js_result.PNG" width="300"/>
+
+<br><hr><br>
+
+
+
 ## 03.23 4주차
 ### 📚 JSX
 **JSX (JavaScript XML)** : JavaScript의 확장 문법으로 JavaScript와 XML/HTML을 합친 것
