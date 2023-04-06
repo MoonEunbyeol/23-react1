@@ -1,6 +1,285 @@
 # 202130114 문은별
 <br>
 
+## 03.30 5주차
+### 📚 엘리먼트
+> Elements are the smallest building blocks of React apps. <br>
+엘리먼트는 리액트 앱의 가장 작은 빌딩 블록들
+
+**Element** : 리액트 앱을 구성하는 요소. 웹사이트의 경우 DOM 엘리먼트이며 HTML 요소를 의미
+
+**리액트 엘리먼트와 DOM엘리먼트의 차이** : 리액트 엘리먼트는 Virtual DOM의 형태. DOM 엘리먼트는 페이지의 모든 정보를 가지고 있어 무거우나 리액트 엘리먼트는 변화한 부분만 갖고 있어 가벼움
+
+|구분|DOM|Virtual DOM|
+|:---:|:---|:---|
+|업데이트 속도|느림|빠름|
+|element 업데이트 방식|DOM 전체를 업데이트|변화 부분을 가상 DOM으로 만든 후 DOM과 비교하여 다른 부분만 업데이트|
+|메모리|낭비가 심함|효율적|
+
+**엘리먼트의 생김새** : 리액트 엘리먼트는 자바스크립트 객체 형태로 존재. 컴포넌트, 속성 및 내부의 모든 자식(children)에 대한 정보를 포함하고 있는 일반적인 자바스크립트 객체. 이 객체는 마음대로 변경할 수 없는 불변성을 갖고 있음.
+
+```js
+{
+  type: Button, //컴포넌트 이름
+  props: {
+    color: 'green',
+    children: 'Hello, element!'
+  }
+}
+```
+\* 리액트 엘리먼트는 JS 객체 형태로 존재. 이 객체를 만드는 역할을 하는 것이 createElement() 함수
+
+**createElement()** : 내부적으로 자바스크립트 객체를 만드는 역할을 하는 함수
+1. 첫 번째 매개변수 : type. 이 곳에 태그가 들어가면 그대로 표현, 만일 리액트 컴포넌트가 들어가면 이 것을 분해해 태그로 만들게 됨.
+1. 두 번째 매개변수 : props. 속성
+1. 세 번째 매개변수 : children. 자식 태그
+
+```js
+React.createElement(
+  type,
+  [props],
+  [...children]
+)
+```
+
+**엘리먼트의 특징** : 불변성. 즉 한 번 생성된 엘리먼트의 children이나 attributes(속성)을 바꿀 수 없음.
+
+* 만일 내용이 바뀌면 : 컴포넌트를 통해 새로운 엘리먼트를 생성 -> 이전 엘리먼트와 교체를 하는 방법으로 내용을 바꿈. 이렇게 교체하는 작업을 위해 Virtual DOM을 사용
+
+<br>
+
+### 📚 엘리먼트 렌더링하기
+**root DOM node** : id값이 root인 div태그로 단순하지만 리액트에 필수로 들어가는 중요한 코드. 이 div태그 안에 있는 모든 것이 리액트 DOM에 의해서 관리. 
+```html
+<div id="root"></div>
+```
+
+**엘리먼트 렌더링** : render() 함수를 사용. Virtual DOM에서 실제 DOM으로 이동하는 과정
+1. 첫 번째 파라미터 : 출력할 리액트 엘리먼트
+1. 두 번째 파라미터 : 출력할 타겟
+```js
+const element = <h1>안녕, 리액트!</h1>;
+ReactDOM.render(element, document.getElementById('root));
+```
+
+<br>
+
+### 📚 렌더링된 엘리먼트 업데이트하기
+**엘리먼트 업데이트** : 기존 엘리먼트를 변경하는 것이 아니라 새로운 엘리먼트를 생성해서 바꿔치기하는 것
+
+**실습 코드** : 교재와는 상이. CDN 링크 및 babel 사용
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!--8~10행 스크립트 추가. 헤드나 바디에 넣어도 상관 X / Babel-->
+</head>
+<body>
+  <div id="root"></div>
+
+  <!--실행 스크립트-->
+  <script type="text/babel">
+    function tick() {
+      const element = (
+        <div>
+          <h1>안녕, 리액트!</h1>
+          <h2>현재 시간 : {new Date().toLocaleTimeString()}</h2>
+        </div>
+      );
+      ReactDOM.render(element, document.getElementById("root"));
+    }
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/5week/clock.html_result.PNG" width="300"/>
+
+<br>
+
+### 💻 실습 : 시계 만들기
+**Clock.jsx**
+```jsx
+import React from "react";
+
+function Clock(props) {
+  return (
+    <div>
+      <h1>안녕, 리액트! (4.4 실습)</h1>
+      <h2>현재 시간 : {new Date().toLocaleTimeString()}</h2>
+    </div>
+  );
+}
+
+export default Clock;
+```
+**Index.js**
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import Clock from './chapter_04/Clock';
+
+setInterval(() => {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <React.StrictMode>
+    <Clock />
+  </React.StrictMode>
+  );
+}, 1000);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/5week/4.4_index.js_result.PNG" width="300"/>
+
+<br>
+
+### 📚 컴포넌트
+**컴포넌트** : 
+- 컴포넌트 기반 : 작은 컴포넌트가 모여 큰 컴포넌트를 구성하고, 다시 이런 컴포넌트들이 모여서 구성한다는 것을 의미
+- 컴포넌트 재사용이 가능하기 때문에 전체 코드의 양을 줄일 수 있어 개발 시간과 유지 보수 비용 절감 가능
+- 컴포넌트는 자바스크립트 함수와 입력과 출력이 있다는 면에서 유사하나 입력은 Prps가 담당하고, 출력은 리액트 엘리먼트의 형태로 출력
+- 엘리먼트를 필요한 만큼 만들어 사용한다는 면에서는 객체 지향의 개념과 비슷
+
+**리액트 컴포넌트 역할** : 어떠한 속성들을 입력으로 받아서 그에 맞는 리액트 엘리먼트를 생성하여 리턴해주는 것
+
+<br>
+
+### 📚 Props
+**Props의 개념** : 
+- prop(property : 속성, 특성)의 준말로 컴포넌트의 속성을 의미
+- 컴포넌트에 어떤 속성, props를 넣느냐에 따라서 속성이 다른 엘리먼트가 출력
+- 컴포넌트에 전달 할 다양한 정보를 담고 있는 자바스크립트 객체
+
+**Props의 특징** : 읽기 전용으로 변경할 수 없음. 속성이 다른 엘리먼트를 생성하려면 새로운 props를 컴포넌트에 전달
+
+\* Pure함수 : 인수로 받은 정보가 함수 내부에서도 변하지 않는 함수<br> 　Impure함수 : 인수로 받은 정보가 함수 내부에서 변하는 함수
+
+> 모든 리액트 컴포넌트는 그들의 props에 관해서는 Pure 함수 같은 역할을 해야 한다.
+
+**Props 사용법** : JSX에서는 key-value(키-값)쌍의 형태로 컴포넌트에 props를 넣을 수 있음
+```jsx
+function App(props) {
+  return (
+    <Profile
+      name="홍길동"
+      introduction="안녕하세요, 홍길동입니다."
+      viewCount={1500}
+    />
+  );
+}
+```
+\* App 컴포넌트에서 props를 인자로 받아 내부의 Profile 컴포넌트로 전달해서 name, introduction, viewCount에 각각 속성을 할당. 이때 전달되는 props는 아래 코드와 같은 자바스크립트 객채
+```js
+{
+  name: "홍길동",
+  introduction: "안녕하세요, 홍길동입니다.",
+  viewCount: 1500
+}
+```
+
+**JSX를 사용하지 않는 경우 props의 전달 방법** : createElement() 함수 사용
+```js
+React.createElement(
+  Profile,
+  {
+    name: "홍길동",
+    iintroduction: "안녕하세요, 홍길동입니다.".
+    viewCount: 1500
+  },
+  null
+);
+```
+
+<br>
+
+### 📚 컴포넌트 생성
+**컴포넌트의 종류** :
+- 리액트 초기 버전에서는 클래스 컴포넌트를 주로 사용
+- 이후 Hook이라는 개념이 나오면서 최근에는 함수형 컴포넌트를 주로 사용
+
+**함수형 컴포넌트** : Welcome 함수의 경우 하나의 props 객체를 받아서 인사말이 담긴 리액트 엘리먼트를 리턴
+```js
+function Welcome(props) {
+  return <h1>안녕, {props.name}</h1>
+}
+```
+
+**클래스형 컴포넌트** : 리액트의 모든 클래스 컴포넌트는 React.Component를 상속받아서 만듦
+```js
+class Welcom extends React.Component {
+  render() {
+    return <h1>안녕, {this.props.name}</h1>;
+  }
+}
+```
+
+**컴포넌트 이름 짓기** : 컴포넌트 이름은 항상 대문자로 시작. 리액트는 소문자로 시작하는 컴포넌트를 DOM 태그로 인식하기 때문
+\* 컴포넌트 파일 이름과 컴포넌트 이름은 같게 함.
+
+**컴포넌트의 렌더링** : 최종적으로 React DOM을 통해 실제 DOM에 효과적으로 업데이트 = 실제 브라우저를 통해서 볼 수 있음
+```js
+function Welcome(props) {
+  return <h1>안녕, {props.name}</h1>
+}
+
+const element = <Welcome name="인제" />;
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+```
+
+<br>
+
+### 📚 컴포넌트 합성
+**컴포넌트 합성** : 
+- 여러 개의 컴포넌트를 합쳐서 하나의 컴포넌트를 만드는 것
+- 리액트에서는 컴포넌트 안에 또 다른 컴포넌트를 사용할 수 있기 때문에, 복잡한 화면을 여러 개의 컴포넌트로 나누어 구현 가능
+```js
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>
+}
+
+function App(props) {
+  return (
+    <div>
+      <Welcome name="Mike" />
+      <Welcome name="Steve" />
+      <Welcome name="Jane" />
+    </div>
+  )
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+```
+\* App 컴포넌트 안에 3개의 Welcome 컴포넌트가 있고, 각각의 Welcome 컴포넌트는 각기 다른 props를 가지고 있음 = App 컴포넌트를 root로 해서 하위 컴포넌트들이 존재하는 형태로 리액트로만 구성된 앱의 기본적인 구조
+
+<br><hr><br>
+
+
+
 ## 03.23 4주차
 ### 📚 JSX
 **JSX (JavaScript XML)** : JavaScript의 확장 문법으로 JavaScript와 XML/HTML을 합친 것
