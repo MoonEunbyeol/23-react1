@@ -1,6 +1,359 @@
 # 202130114 문은별
 <br>
 
+## 04.07 6주차
+### 📚 컴포넌트 추출
+**컴포넌트 추출** : 복잡한 컴포넌트를 쪼개서 여러 개의 컴포넌트로 나누는 과정 = 큰 컴포넌트에서 일부를 추출해서 새로운 컴포넌트를 만드는 것
+
+\* 기능 단위로 구분한 것이 좋고, 나중에 곧바로 재사용이 가능한 형태로 추출하는 것이 좋음
+
+### 💻 5.6 실습 : 댓글 컴포넌트 만들기
+**Comment.jsx (CSS 미적용)**
+```jsx
+import React from "react";
+
+function Comment(props) {
+  return (
+    <div>
+      <h1>제가 만든 첫 컴포넌트입니다. (5.6 실습)</h1>
+    </div>
+  );
+}
+
+export default Comment;
+```
+
+**CommentList.jsx**
+```jsx
+import React form "react";
+import Comment from "./Comment";
+
+function CommentList(props) {
+  return (
+    <div>
+      <Comment />
+    </div>
+  );
+}
+
+export default CommentList;
+```
+
+**index.js**
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import CommentList from './chapter05/CommentList';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <CommentList />
+  </React.StrictMode>
+);
+
+reportWebVitals();
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/5.6_index.js_result.PNG" width="300"/>
+
+<br><br>
+
+**Comment.jsx (CSS 적용 및 컴포넌트 추가)**
+```jsx
+import React from "react";
+
+const styles = {
+  wrapper: {
+      margin: 8,
+      padding: 8,
+      display: "flex",
+      flexDirection: "row",
+      border: "1px solid grey",
+      borderRadius: 16,
+  },
+  imageContainer: {},
+  image: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+  },
+  contentContainer: {
+      marginLeft: 8,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+  },
+  nameText: {
+      color: "black",
+      fontSize: 16,
+      fontWeight: "bold",
+  },
+  commentText: {
+      color: "black",
+      fontSize: 16,
+  },
+};
+
+function Comment(props) {
+  return (
+    <div style={styles.wrapper}>
+      <div style={styles.imageContainer}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+          // src="./image/picture.png" 이런 식으로도 추가 가능. index 기준으로 작성
+          alt="프로필 이미지"
+          style={styles.image}
+        />
+      </div>
+      <div style={styles.contentContainer}>
+        <span style={styles.nameText}> {props.name} </span>
+        <span style={styles.commentText}> {props.comment} </span> {/*props로 전달받는 경우*/}
+      </div>
+    </div>
+  );
+}
+
+export default Comment;
+```
+
+**CommentList.jsx**
+```jsx
+import React from "react";
+import Comment from "./Comment";
+
+const comments = [
+  {
+    name: "문은별",
+    comment: "안녕하세요. 문은별입니다."
+  },
+  {
+    name: "홍길동",
+    comment: "안녕하세요. 홍길동입니다."
+  },
+  {
+    name: "테스트",
+    comment: "안녕하세요. 테스트입니다."
+  },
+]
+
+function CommentList(props) {
+  return (
+    <div>
+      {comments.map((foo) => {
+        return (
+          <Comment name={foo.name} comment={foo.comment} />
+        )
+      })}
+    </div>
+  )
+}
+
+export default CommentList; //세미콜론 없어도 오류 미발생
+```
+
+\* 스타일도 객체를 만들어 사용이 가능. 코드처럼 별도의 객체로 받아 컴포넌트에서는 이것을 분리하여 출력하도록 해야 잘 작성된 코드
+
+
+**결과** : (index.js는 변경 X)
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/5.6_index.js_component_result.PNG" width="300"/>
+
+<br>
+
+### 📚 State
+**State** : 
+- 리액트 컴포넌트의 상태를 의미
+- 정상 비정상 여부가 아닌 리액트 컴포넌트의 데이터를 의미
+- 리액트 컴포넌트의 변경 가능한 데이터
+- state가 변하면 다시 렌더링이 되기 때문에 렌더링이나 데이터 흐름에 사용되는 값만 state에 포함시켜야 함
+
+**State의 특징** : 따로 복잡한 형태가 있는 것이 아니라, 그냥 하나의 자바스크립트 객체
+
+**setState()** : 리액트에서의 state는 컴포넌트의 렌더링과 관련 있기 때문에 마음대로 수정하게 되면 개발자가 의도한 대로 작동하지 않을 가능성 -> state를 변경하고자 할 때에는 setState() 함수 사용
+
+```js
+//state를 직접 수정 (리액트가 수정된 것을 제대로 인지하지 못할 수 있기 때문에 잘못된 사용법)
+this.state = {
+  name: 'Inje'
+};
+
+//setState 함수를 통한 수정 (정상적인 사용법)
+this.setState({
+  name: 'Inje'
+});
+```
+
+\* component : 빵 틀 / element : 재료 / instance : 재료를 빵 틀에 넣고 만든 빵으로 비교하면 쉬움
+
+<br>
+
+### 📚 생명주기
+**생명주기** : 컴포넌트의 생성 시점(출생), 사용 시점(인생), 종료 시점(사망)을 나타내는 것으로 constructor(생성자)가 실행되면서 컴포넌트가 생성
+\* 컴포넌트가 계속 존재하는 것이 아니라 시간에 흐름에 따라 생성되고 업데이트되다가 사라짐
+
+**마운트 (Mount)** : 컴포넌틑가 생성되는 시점으로 이 과정을 마운트라 부름. 생성 직후 <u>componentDidMount()</u> 함수가 호출
+
+**업데이트 (Update)** : 리액트 컴포넌트도 생애 동안 변화를 겪으면서 여러 번 렌더링 되는데 이를 업데이트 되는 과정이라 할 수 있음. 렌더링은 props, setState(), forceUpdate()에 의해 상태가 변경되면 이루어짐. 렌더링 이후에 <u>componentDidUpdate()</u> 함수가 호출
+
+**언마운트 (Unmount)** : 상위 컴포넌트에서 현재 컴포넌트를 더 이상 화면에 표시하지 않게 될 때 언마운트된다 볼 수 있음. 이 때 언마운트 직전에 <u>componentWillUnmount()</u> 함수가 호출
+
+<br>
+
+### 💻 6.3 실습 : State와 생명주기 함수 사용
+**Notification.jsx**
+```js
+import React from "react";
+
+const styles = {
+  wrapper: {
+    margin: 8,
+    padding: 8,
+    display: "flex",
+    flexDirection: "row",
+    border: "1px solid grey",
+    borderRadius: 16,
+  },
+  messageText: {
+    color: "black",
+    fontSize: 16,
+  },
+};
+
+class Notification extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {}; //초기화
+  }
+
+  componentDidMount() {
+    console.log(`${this.props.id} this.componentDidMount() called.`);
+  }
+
+  componentDidUpdate() {
+    console.log(`${this.props.id} this.componentDidUpdate() called.`);
+  }
+
+  componentWillUnmount() {
+    console.log(`${this.props.id} this.componentWillUnmount() called.`)
+  }
+
+  render() {
+    return (
+      <div style={styles.wrapper}>
+        <span style={styles.messageText}>{this.props.message}</span>
+      </div>
+    );
+  }
+}
+
+export default Notification;
+```
+
+**NotificationList.jsx** : Notification 컴포넌트를 목록 형태로 보여주기 위한 컴포넌트
+```js
+import React from "react";
+import Notification from "./Notification";
+
+const reservedNotifications = [
+  {
+    id: 1,
+    message: "안녕하세요. 오늘 일정을 알려드립니다.",
+  },
+  {
+    id: 2,
+    message: "점심 식사 시간입니다.",
+  },
+  {
+    id: 3,
+    message: "이제 곧 미팅이 시작됩니다",
+  },
+];
+
+var timer;
+
+class NotificationList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      notifications: [],
+    };
+  }
+
+  componentDidMount() {
+    const { notifications } = this.state;
+    timer = setInterval(() => {
+      if (notifications.length < reservedNotifications.length) { 
+        //json에 데이터의 개수를 확인 후 개수만큼 setState에 하나씩 넣어줌
+        const index = notifications.length;
+        notifications.push(reservedNotifications[index]);
+        this.setState({
+          notifications: notifications,
+        });
+      } else {
+        clearInterval(timer);
+      }
+    }, 1000); //comment를 1초에 한 번씩 출력을 위해 인터벌 사용
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.notifications.map((notification) => {
+          return (
+            <Notification
+              key={notification.id}
+              id={notification.id}
+              message={notification.message}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+}
+
+export default NotificationList;
+```
+
+**index.js**
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import NotificationList from './chapter_06/NotificationList';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <NotificationList />
+  </React.StrictMode>
+);
+
+reportWebVitals();
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/6.3_index.js_result.PNG" width="300"/>
+
+<br>
+
+**React Developer Tools** : 리액트를 위해서 별도로 개발된 리액트 개발자 도구
+
+
+
+<br><hr><br>
+
+
+
 ## 03.30 5주차
 ### 📚 엘리먼트
 > Elements are the smallest building blocks of React apps. <br>
