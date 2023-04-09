@@ -59,7 +59,7 @@ reportWebVitals();
 
 **결과** : 
 
-<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/5.6_index.js_result.PNG" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/5.6_index.js_result.PNG" width="400"/>
 
 <br><br>
 
@@ -161,7 +161,7 @@ export default CommentList; //세미콜론 없어도 오류 미발생
 
 **결과** : (index.js는 변경 X)
 
-<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/5.6_index.js_component_result.PNG" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/5.6_index.js_component_result.PNG" width="400"/>
 
 <br>
 
@@ -196,11 +196,11 @@ this.setState({
 **생명주기** : 컴포넌트의 생성 시점(출생), 사용 시점(인생), 종료 시점(사망)을 나타내는 것으로 constructor(생성자)가 실행되면서 컴포넌트가 생성
 \* 컴포넌트가 계속 존재하는 것이 아니라 시간에 흐름에 따라 생성되고 업데이트되다가 사라짐
 
-**마운트 (Mount)** : 컴포넌틑가 생성되는 시점으로 이 과정을 마운트라 부름. 생성 직후 <u>componentDidMount()</u> 함수가 호출
+**마운트 (Mount)** : 컴포넌틑가 생성되는 시점으로 이 과정을 마운트라 부름. 생성 직후 *componentDidMount()* 함수가 호출
 
-**업데이트 (Update)** : 리액트 컴포넌트도 생애 동안 변화를 겪으면서 여러 번 렌더링 되는데 이를 업데이트 되는 과정이라 할 수 있음. 렌더링은 props, setState(), forceUpdate()에 의해 상태가 변경되면 이루어짐. 렌더링 이후에 <u>componentDidUpdate()</u> 함수가 호출
+**업데이트 (Update)** : 리액트 컴포넌트도 생애 동안 변화를 겪으면서 여러 번 렌더링 되는데 이를 업데이트 되는 과정이라 할 수 있음. 렌더링은 props, setState(), forceUpdate()에 의해 상태가 변경되면 이루어짐. 렌더링 이후에 *componentDidUpdate()* 함수가 호출
 
-**언마운트 (Unmount)** : 상위 컴포넌트에서 현재 컴포넌트를 더 이상 화면에 표시하지 않게 될 때 언마운트된다 볼 수 있음. 이 때 언마운트 직전에 <u>componentWillUnmount()</u> 함수가 호출
+**언마운트 (Unmount)** : 상위 컴포넌트에서 현재 컴포넌트를 더 이상 화면에 표시하지 않게 될 때 언마운트된다 볼 수 있음. 이 때 언마운트 직전에 *componentWillUnmount()* 함수가 호출
 
 <br>
 
@@ -342,13 +342,11 @@ reportWebVitals();
 
 **결과** : 
 
-<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/6.3_index.js_result.PNG" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/6week/6.3_index.js_result.PNG" width="400"/>
 
 <br>
 
 **React Developer Tools** : 리액트를 위해서 별도로 개발된 리액트 개발자 도구
-
-
 
 <br><hr><br>
 
@@ -509,7 +507,7 @@ reportWebVitals();
 **컴포넌트** : 
 - 컴포넌트 기반 : 작은 컴포넌트가 모여 큰 컴포넌트를 구성하고, 다시 이런 컴포넌트들이 모여서 구성한다는 것을 의미
 - 컴포넌트 재사용이 가능하기 때문에 전체 코드의 양을 줄일 수 있어 개발 시간과 유지 보수 비용 절감 가능
-- 컴포넌트는 자바스크립트 함수와 입력과 출력이 있다는 면에서 유사하나 입력은 Prps가 담당하고, 출력은 리액트 엘리먼트의 형태로 출력
+- 컴포넌트는 자바스크립트 함수와 입력과 출력이 있다는 면에서 유사하나 입력은 Props가 담당하고, 출력은 리액트 엘리먼트의 형태로 출력
 - 엘리먼트를 필요한 만큼 만들어 사용한다는 면에서는 객체 지향의 개념과 비슷
 
 **리액트 컴포넌트 역할** : 어떠한 속성들을 입력으로 받아서 그에 맞는 리액트 엘리먼트를 생성하여 리턴해주는 것
@@ -773,7 +771,7 @@ reportWebVitals();
 
 \* DOM (Document Object Model) : 페이지를 정의하는 하나의 객체<br>Virtual DOM : 가상의 DOM
 
-<u>DOM은 동기식, Virtual DOM은 비동기식 방법으로 렌더링</u>
+*DOM은 동기식, Virtual DOM은 비동기식 방법으로 렌더링*
 
 **동기식** : 요청하는 페이지를 데이터베이스에서 받아와서 페이지를 생성해서 통째로 전달. 기존의 방식으로 화면 업데이트 시 DOM 직접 수정 = 성능에 영향을 크게 미치고 비용도 굉장히 많이 드는 작업. 즉 조작이 비효율적
 
