@@ -1,11 +1,185 @@
 # 202130114 문은별
 <br>
 
+## 04.13 7주차
+### 📚 훅
+**훅 (Hook)** : 
+- 함수형 컴포넌트에서도 state나 생명주기 함수의 기능을 사용하게 해주기 위해 추가된 기능
+- 함수형 컴포넌트도 훅을 사용하여 클래스형 컴포넌트의 기능을 모두 동일하게 구현할 수 있게 됨
+- 훅의 이름은 모두 'use'로 시작
+
+\* 예전에 사용하던 함수형 컴포넌트는 별도로 state를 정의하거나, 컴포넌트의 생명주기에 맞춰서 어떤 코드가 실행되도록 할 수 없었음 
+
+<br>
+
+### 📚 useState
+**useState** : 
+- 함수형 컴포넌트에서 state를 사용하기 위한 Hook
+- const [변수명, set함수명] = useState(초깃값);
+- 함수의 리턴 값은 배열의 형태
+\* set함수명은 state를 업데이트 하는 함수
+
+```js
+import React, { useState } from "react";
+
+function Counter(props) {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>총 {count}번 클릭했습니다.</p>
+      <button onClick={() => setCount(count + 1)}>
+        클릭
+      </button>
+    </div>
+  );
+}
+```
+
+<br>
+
+### 📚 useEffect
+**useEffect** : 
+- 사이트 이펙트를 수행하기 위한 훅
+- useEffect() 훅만으로 생명주기 함수와 동일한 기능을 수행 할 수 있음
+- useEffect(이펙트 함수, 의존성 배열);
+- 의존성 배열은 이펙트가 의존하고 있는 배열로, 배열 안에 있는 변수 중에 하나라도 값이 변경되었을 때 이펙트 함수가 실행됨
+- 처음 컴포넌트가 렌더링 된 이후, 그리고 재 렌더링 이후에 실행
+- 만약 이펙트 함수가 마운트와 언마운트 될 때만 한 번씩 실행되게 하고 싶으면 빈 배열을 넣으면 됨 = 의존성 배열 생략
+
+\* side effect : 부작용. 일반적으로 프로그래밍에서는 '개발자가 의도하지 않은 코드가 실행되면서 버그가 발생하는 것'을 말하나 리액트에서는 그냥 *효과 혹은 영향*을 뜻함. 서버에서 데이터를 받아오거나 수동으로 DOM을 변경하는 등의 작업
+
+<br>
+
+### 📚 useMemo
+**useMemo** : 
+- Memoized value를 리턴하는 훅
+- 이전 계산값을 갖고 있기 때문에 컴포넌트가 다시 렌더링될 때마다 연산량이 높은 작업을 반복하는 것을 피할 수 있음
+- 렌더링이 일어나는 동안 실행 = 렌더링이 일어나는 동안 실행되서는 안되는 작업을 넣으면 안됨 (ex. useEffect에서 실행되어야 할 사이드 이펙트)
+- 빈 배열을 넣게 되면 컴포넌트 마운트 시에만 함수가 실행
+
+```js
+const memoizedValue = useMemo(
+  () => {
+    // 연산량이 높은 작업을 수행하여 결과를 반환
+    return computeExpensiveValue(의존성 변수1, 의존성 변수2);
+  }, [의존성 변수1, 의존성 변수2]
+);
+```
+
+<br>
+
+### 📚 useCallback
+**useCallback** : 
+- useMemo()와 유사한 역할이나 값이 아닌 함수를 반환
+- 의존성 배열에 따라 Memoized 값을 반환하는 것은 useMemo와 동일
+- 파라미터로 받은 함수를 콜백이라 부름
+- useMemo와 마찬가지로 의존성 배열 중 하나라도 변경되면 콜백함수를 반환
+
+```js
+const memoizedCallback = useCallback(
+  () => {
+    doSomething(의존성 변수1, 의존성 변수2);
+  }, [의존성 변수1, 의존성 변수2]
+);
+```
+
+<br>
+
+### 📚 useRef
+**useRef** : 
+- 레퍼런스를 사용하기 위한 훅으로 레퍼런스 객체를 반환
+- const refContainer = useRef(초깃값);
+- 반환된 레퍼런스 객체는 컴포넌트의 라이프타임 전체에 걸쳐서 유지 = 컴포넌트 마운트 해제 전까지는 계속 유지
+- 매번 렌더링될 때마다 항상 같은 ref 객체를 반환
+
+\* 레퍼런스 : 특정 컴포넌트에 접근할 수 있는 객체를 의미. 레퍼런스 객체에는 .current라는 속성이 있는데 이것은 현재 레퍼런스(참조)하고 있는 엘리먼트를 의미
+
+<br>
+
+### 📚 훅의 규칙
+1. **훅은 무조건 최상위 레벨에서만 호출** = 반복문이나 조건문 또는 중첩된 함수들 안에서 훅을 호출하면 안됨. 이 규칙에 따라서 훅은 컴포넌트가 렌더링 될 때마다 같은 순서로 호출되어야 함
+1. **리액트 함수 컴포넌트에서만 훅을 호출해야 함**. 일반 자바스크립트 함수에서 훅을 호출하면 안됨
+
+<br>
+
+### 📚 커스텀 훅
+**커스텀 훅** : 이름이 use로 시작하고 내부에서 다른 훅을 호출하는 단순한 자바스크립트 함수. 파라미터로 무엇을 받을지, 어떤 것을 리턴해야 할지를 개발자가 직접 정할 수 있음
+
+<br>
+
+### 💻 7.9 실습 : 훅을 사용한 컴포넌트 개발
+**useCounter.jsx**
+```js
+import React, { useState } from "react";
+
+function useCounter(initialValue) {
+  const [count, setCount] = useState(initialValue);
+
+  const increaseCount = () => setCount((count) => count + 1);
+  const decreaseCount = () => setCount((count) => Math.max(count - 1, 0));
+
+  return [count, increaseCount, decreaseCount];
+}
+
+export default useCounter;
+```
+
+**Accommodate.jsx**
+```js
+import React, { useEffect, useState } from "react";
+import useCounter from "./useCounter";
+
+const MAX_CAPACITY = 10;
+
+function Accommodate(props) {
+  const [isFull, setIsFull] = useState(false);
+  const [count, increaseCount, decreaseCount] = useCounter(0);
+
+  useEffect(() => {
+    console.log("======================");
+    console.log("useEffect() is called.");
+    console.log(`isFull : ${isFull}`);
+  });
+
+  useEffect(() => {
+    setIsFull(count >= MAX_CAPACITY);
+    console.log(`Current count value : ${count}`);
+  }, [count]);
+
+  return (
+    <div style={{padding: 16}}>
+      <p>{`총 ${count}명 수용했습니다.`}</p>
+
+      <button onClick={increaseCount} disabled={isFull}>입장</button>
+      <button onClick={decreaseCount}>퇴장</button>
+
+      {isFull && <p style={{color: "red"}}>정원이 가득찼습니다.</p>}
+    </div>
+  );
+}
+
+export default Accommodate;
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/7week/7.9_index.js_result_01.PNG" width="400"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/7week/7.9_index.js_result_02.PNG" width="400"/>
+
+\* useCounter() 훅에서 Math.max() 함수를 사용하여 카운트 값이 0 아래로 내려갈 수 없게 함 -> 값이 0이 되면 더 이상 useEffect() 훅도 호출되지 않음
+
+<br><hr><br>
+
+
+
 ## 04.07 6주차
 ### 📚 컴포넌트 추출
 **컴포넌트 추출** : 복잡한 컴포넌트를 쪼개서 여러 개의 컴포넌트로 나누는 과정 = 큰 컴포넌트에서 일부를 추출해서 새로운 컴포넌트를 만드는 것
 
 \* 기능 단위로 구분한 것이 좋고, 나중에 곧바로 재사용이 가능한 형태로 추출하는 것이 좋음
+
+<br>
 
 ### 💻 5.6 실습 : 댓글 컴포넌트 만들기
 **Comment.jsx (CSS 미적용)**
