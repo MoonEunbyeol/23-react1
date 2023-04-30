@@ -1,6 +1,297 @@
 # 202130114 문은별
 <br>
 
+## 04.27 9주차
+### 📚 이벤트 처리
+**DOM에서 클릭 이벤트 처리** :
+```js
+<button onclick="activate()">
+  Activate
+</button>
+```
+
+**React에서 클릭 이벤트 처리** :
+```js
+<button onClick={activate}>
+  Activate
+</button>
+```
+**DOM과 React에서의 클릭 이벤트 처리 차이점** :
+1. 이벤트 이름이 onclick → onClick으로 변경 (Camel case)
+1. 전달하려는 함수는 문자열에서 함수 그대로 전달 
+
+**이벤트 핸들러 (Event Handler)** : 이벤트가 발생했을 때 해당 이벤트를 처리하는 함수. 이벤트가 발생하는 것을 계속 듣고 있다는 의미로 '이벤트 리스너 (Event Listener)'라고도 함
+
+**이벤트 핸들러 추가** : 
+```js
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { isToggleOn: true };
+
+    // callback에서 'this'를 사용하기 위해서 바인딩 필수
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }))
+  }
+
+  render() {
+    return (
+      <button onClick={this.handleClick}>
+        {this.state.isToggleOn ? '켜짐' : '꺼짐'}
+      </button>
+    );
+  }
+}
+```
+\* bind 미사용 시 this.handleClick은 글로벌 스코프에서 호출되어 undefined으로 사용 불가능
+
+**함수형에서 이벤트 핸들러 정의** : bind, 클래스 필드 문법 미사용 시
+```js
+function Toggle(props) {
+  const [isToggleOn, setIsToggleOn] = useState(true);
+
+  // 함수 안에 함수로 정의
+  function handleClick() {
+    setIsToggleOn((isToggleOn) => !isToggleOn);
+  }
+
+  // arrow function을 사용하여 정의
+  const handleClick = () => {
+    setIsToggleOn((isToggleOn) => !isToggleOn);
+  }
+
+  return (
+    <button onClick={handleClick}>
+      {isToggleOn ? "켜짐" : "꺼짐"}
+    </button>
+  );
+}
+```
+
+<br>
+
+### 📚 Arguments 전달
+**Parameter** : 매개변수. 함수를 정의할 때
+**Argument** : 인자. 함수를 사용할 때
+\* 같은 의미로 봐도 됨
+
+```js
+// 명시적으로 event를 매개변수로 넣어 줌
+<button onCLick={(event) => this.deleteItem(id, event)}>삭제하기</button>
+// id 이후 두번째 매개변수로 event가 자동 전달 (클래스형에서 사용하는 방법)
+<button onCLick={this.deleteItem.bind(this, id)}>삭제하기</button>
+```
+- 모두 동일한 역할을 하는 코드이나 하나는 화살표 함수, 하나는 bind를 사용
+- event라는 매개변수는 리액트의 이벤트 객체를 의미
+- 두 방법 모두 첫 번째 매개변수 : id, 두 번째 매개변수 : event
+
+**함수형 컴포넌트에서 이벤트 핸들러에 매개변수 전달** :
+```js
+function MyButton(props) {
+  const handleDelete = (id, event) => {
+    console.log(id, event);
+  }
+
+  return (
+    <button onClick={(event) => this.handleDelete(1, event)}>삭제하기</button>
+  );
+}
+```
+\* 이벤트 핸들러 호출 시 원하는 순서대로 매개변수를 넣어서 사용
+
+<br>
+
+### 💻 8.3 실습 : 클릭 이벤트 처리하기
+**ConfirmButton.jsx**
+```js
+import React from "react";
+import { useState } from "react";
+
+function ConfirmButton(props) {
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+    const handleConfirm = () => {
+      setIsConfirmed((prevIsConfirmed) => !prevIsConfirmed);
+    };
+
+    return (
+      <button onClick={handleConfirm} disabled={isConfirmed}>
+        {isConfirmed ? "확인됨" : "확인하기"}
+      </button>
+    );
+}
+
+export default ConfirmButton;
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/9week/8.3_result_01.PNG" width="400"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/9week/8.3_result_02.PNG" width="400"/>
+
+<br>
+
+### 📚 조건부 렌더링
+**조건 (Condition)** : 컴퓨터 프로그래밍에서의 컨디션은 우리가 알고 있는 조건문의 조건
+
+**조건부 렌더링 (Conditional Rendering)** : 조건에 따른 렌더링. 어떠한 조건에 따라서 렌더링이 달라지는 것을 의미
+
+<br>
+
+### 📚 엘리먼트 변수
+**엘리먼트 변수 (Element Variables)** : 렌더링해야 될 컴포넌트를 변수처럼 사용하는 방법. 리액트 앨리먼트를 변수처럼 다루는 방법
+
+```js
+let button;
+is (isLoggedIn) {
+  button = <LogoutButton onClick={handleLogoutClick} />;
+} else {
+  button = <LoginButton onClick={handleLoginClick} />;
+}
+
+return (
+  <div>
+    <Greeting isLoggedIn={isLoggedIn} />
+    {button}
+  </div>
+);
+```
+\* state에 따라 button 변수에 컴포넌트의 객체를 저장하여 return문에 사용
+
+<br>
+
+### 📚 인라인 조건
+**인라인 (Inline)** : Line의 In. 말 그대로 코드를 별도로 분리된 곳에 작성하지 않고 해당 코드가 필요한 곳 안에 직접 집어넣는다는 뜻
+
+**인라인 조건 (Inline Conditions)** : 조건문을 코드 안에 집어넣는 것
+
+**인라인 If** : if문을 필요한 곳에 직접 집어 넣어서 사용하는 방법. if문과 동일한 효과를 내기 위해 &&라는 논리 연산자를 사용
+
+\* && 연산자 : AND 연산. 조건문이 모두 true인 경우에만 전체 결과가 true. 
+
+**단축 평가 (Short-circuit evalutaion)** : && 연산자 사용 시 첫 번째 조건문이 false이면 어차피 전체 결과는 false가 되므로 두 번째 조건문은 평가하지 않음. 결과가 정해져 있는 논리 연산에서 불필요한 연산은 하지 않도록 하기 위해 사용하는 방법
+
+```js
+true && expression -> expression
+false && expression -> false
+```
+
+**인라인 If-Else** : 
+- If-Else문을 필요한 곳에 직접 넣어서 사용하는 방법
+- 삼항 연산자 사용 (조건문 ? 참일 경우 : 거짓일 경우)
+- 앞에 나오는 조건문이 true면 첫 번째 항목을 리턴. false면 두 번째 항목을 리턴
+- 문자열이나 엘리먼트를 넣어서 사용 가능
+
+```js
+function UserStatus(props) {
+  return (
+    <div>
+      이 사용자는 현재 <b>{props.isLoggedIn ? '로그인' : '로그인하지 않은'}</b> 상태입니다.
+    </div>
+  )
+}
+```
+
+<br>
+
+### 📚 컴포넌트 렌더링 막기
+**컴포넌트 렌더링 막기** : 특정 컴포넌트를 렌더링하고 싶지 않을 경우 null을 리턴
+```js
+function WarningBanner(props) {
+  if (!props.warning) {
+    return null;
+  }
+
+  return (
+    <div>경고!</div>
+  );
+}
+```
+
+<br>
+
+### 💻 9.5 실습 : 로그인 여부를 나타내는 툴바 만들기
+**Toolbar.jsx**
+```js
+import React from "react";
+
+const styles = {
+  wrapper: {
+    padding: 16,
+    display: "flex",
+    flexDirection: "row",
+    borderBottom: "1px solid grey",
+  },
+  greeting: {
+    marginRight: 8,
+  },
+};
+
+function Toolbar(props) {
+  const { isLoggedIn, onClickLogin, onClickLogout } = props;
+
+  return (
+    <div style={styles.wrapper}>
+      {isLoggedIn && <span style={styles.greeting}>환영합니다!</span>}
+      
+      {isLoggedIn ? (
+        <button onClick={onClickLogout}>로그아웃</button>
+      ) : (
+        <button onClick={onClickLogin}>로그인</button>
+      )}
+    </div>
+  );
+}
+
+export default Toolbar;
+```
+
+**LandingPage.jsx**
+```js
+import React, {useState} from "react";
+import Toolbar from "./Toolbar";
+
+function LandingPage(props) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const onClickLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const onClickLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <div>
+      <Toolbar
+        isLoggedIn={isLoggedIn}
+        onClickLogin={onClickLogin}
+        onClickLogout={onClickLogout}
+      />
+      <div style={{padding : 16}}>소플과 함께하는 리액트 공부!</div>
+    </div>
+  );
+}
+
+export default LandingPage;
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/9week/9.5_result_01.PNG" width="400"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/9week/9.5_result_02.PNG" width="400"/>
+
+<br><hr><br>
+
+
+
 ## 04.13 7주차
 ### 📚 훅
 **훅 (Hook)** : 
