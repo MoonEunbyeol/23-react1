@@ -1,6 +1,401 @@
 # 202130114 문은별
 <br>
 
+## 05.04 10주차
+### 📚 리스트와 키
+**리스트** : 목록. 컴퓨터 프로그래밍에서는 같은 아이템을 순서대로 모아놓은 것. 자바스크립트의 변수나 객체를 하나의 변수로 묶어 놓은 배열과 같은 것
+
+**배열** : 리스트를 위해 사용하는 자료구조
+
+**키** : 각 객체나 아이템을 구분할 수 있는 고유한 값
+
+<br>
+
+### 📚 여러 개의 컴포넌트 렌더링
+
+**여러 개의 컴포넌트 렌더링** : 배열에 들어있는 엘리먼트를 map() 함수를 이용하여 렌더링. 
+
+\* 매핑 : 배열에 들어있는 각 변수에 어떤 처리를 한 뒤 리턴하는 것
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/3week/airbnb_02.png" width="300"/>
+
+**리액트에서 map() 함수 사용 예제** : numbers의 요소에 <li> 태그를 결합해서 리턴
+```js
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((namber) => 
+  <li>{number}</li>
+);
+```
+```js
+ReactDOM.render(
+  <ul>
+    <li>{1}</li>
+    <li>{2}</li>
+    <li>{3}</li>
+    <li>{4}</li>
+    <li>{5}</li>
+  </ul>,
+  document.getElementById('root')
+);
+```
+\* 리턴된 listItems는 \<ul>태그와 결합하여 렌더링
+
+<br>
+
+### 📚 기본적인 리스트 컴포넌트
+```js
+function NumberList(props) {
+  const { numbers } = props;
+
+  const listItems = numbers.map((number) => 
+    <li>{number}</li>
+  );
+
+  return (
+    <ul>{listItems}</ul>
+  );
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+);
+```
+**기본적인 리스트 컴포넌트** : 상단 코드 실행 시 "리스트 아이템에 무조건 키가 있어야 한다"는 경고 문구 출력. key props가 없기 때문 
+
+<br>
+
+### 📚 리스트의 키
+**리스트에서의 키** : 
+- 리스트에서 아이템을 구분하기 위한 고유한 문자열
+- 리스트에서 어떤 아이템이 변경, 추가 또는 제거되었는지 구분하기 위해 사용
+- 키는 같은 리스트에 있는 엘리먼트 사이에서만 고유한 값이면 됨
+
+**키값 사용** :
+1. 숫자의 값을 사용: 배열에 중복된 숫자가 들어있다면 키값도 중복 => 고유해야 한다는 키값의 조건 미충족
+1. id를 사용 : id의 의미 자체가 고유한 키값으로 사용하기 적합
+1. 인덱스를 사용 : 인덱스 값도 고유한 값이기 때문에 사용 가능하나 배열에서 아이템의 순서가 바뀔 수 있는 경우에는 권장하지 않음
+
+\* 리액트에서는 키를 명시적으로 넣어 주지 않으면 기본적으로 이 인덱스 값을 키값으로 사용
+
+<br>
+
+### 💻 10.5 실습 : 출석부 출력하기
+**AttendanceBook.jsx (id값 X)**
+```js
+import React from "react";
+
+const students = [
+  {
+    name: "Inje",
+  }, 
+  {
+    name: "Steve",
+  }, 
+  {
+    name: "Bill",
+  }, 
+  {
+    name: "Jeff",
+  },
+];
+
+function AttendanceBook(props) {
+  return (
+    <ul>
+      {students.map((student) => {
+        return <li>{student.name}</li>
+      })}
+    </ul>
+  );
+}
+
+export default AttendanceBook;
+```
+
+**결과** : key props가 없기 때문에 에러 발생
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/10.5_error_result.PNG" width="300"/>
+
+**AttendanceBook.jsx (id 및 key 추가)**
+```js
+import React from "react";
+
+const students = [
+  {
+    id: 1,
+    name: "Inje",
+  }, 
+  {
+    id: 2,
+    name: "Steve",
+  }, 
+  {
+    id: 3,
+    name: "Bill",
+  }, 
+  {
+    id: 4,
+    name: "Jeff",
+  },
+];
+
+function AttendanceBook(props) {
+  return (
+    <ul>
+      {students.map((student) => {
+        return <li key={student.id}>{student.name}</li>
+      })}
+    </ul>
+  );
+}
+
+export default AttendanceBook;
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/10.5_result.PNG" width="300"/>
+
+<br>
+
+### 📚 폼
+**폼** : 일반적으로 사용자로부터 입력을 받기위한 양식에서 많이 사용. 사용자로부터 입력을 받기 위해 사용하는 것
+
+<br>
+
+### 📚 제어 컴포넌트
+**제어 컴포넌트** : 사용자가 입력한 값에 접근하고 제어할 수 있도록 해주는 컴포넌트. 그 값이 리액트의 통제를 받는 입력 폼 엘리먼트를 의미
+
+```js
+function NameForm(props) {
+  const [ value, setValue ] = useState('');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    alert('입력한 이름: ' + value);
+    event.preventDefault();
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        이름: 
+        <input type="text" value={value} onChange={handleChange} />
+      </label>
+      <button type="submit">제출</button>
+    </form>
+  )
+}
+```
+
+<br>
+
+### 📚 textarea 태그
+**\<textarea>** : 여러 줄에 걸쳐서 나올 정도로 긴 텍스트를 입력받기 위한 HTML 태그
+
+```HTML
+<textarea>
+  안녕하세요. 여기에 이렇게 텍스트가 들어가게 됩니다.
+</textarea>
+```
+
+**리액트에서 텍스트 표시** : state를 통해 value라는 attribute를 변경하여 텍스트 표시
+```js
+function RequestForm(props) {
+  const [ value, setValue ] = useState('요청사항을 입력하세요.');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    alert('입력한 요청사항: ' + value);
+    event.preventDefault();
+  }
+
+  return (
+    <form onSubmit={hanleSubmit}>
+      <label>
+        요청사항: 
+        <textarea value={value} onChange={handleChange} />
+      </label>
+      <button type="submit">제출</button>
+    </form>
+  );
+}
+```
+
+<br>
+
+### 📚 select 태그
+**\<select>** : 드롭다운 목록을 보여주기 위한 HTML 태그
+
+```HTML
+<select>
+  <option value="apple">사과</option>
+  <option value="banana">바나나</option>
+  <option selected value="grape">포도</option>
+  <option value="watermelon">수박</option>
+</select>
+```
+
+**리액트에서 select 속성 사용** : \<select> 태그에 value라는 attribute 를 사용하여 값을 표시
+
+```js
+function FruitSelect(props) {
+  const [ value, setValue ] = useState('grape');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    alert('선택한 과일: ' + value);
+    event.preventDefault();
+  }
+
+  return (
+    <form onSubmit={hanleSubmit}>
+      <label>
+        과일을 선택하세요: 
+        <select value={value} onChange={handleChange}>
+          <option value="apple">사과</option>
+          <option value="banana">바나나</option>
+          <option value="grape">포도</option>
+          <option value="watermelon">수박</option>
+        </select>
+      </label>
+      <button type="submit">제출</button>
+    </form>
+  );
+}
+```
+
+<br>
+
+### 📚 File input 태그
+**File input 태그** : 
+- 디바이스의 저장 장치로부터 사용자가 하나 또는 여러 개의 파일을 선택할 수 있게 해주는 HTML 태그
+- File input 태그는 그 값이 읽기 전용이기 때문에 리액트에서는 비제어 컴포넌트가 됨
+
+```js
+<input type="file" />
+```
+
+<br>
+
+### 📚 여러 개의 입력 다루기
+**하나의 컴포넌트에서 여러 개의 입력 다루기** : 여러 개의 state를 선언하여 각각의 입력에 대해 사용
+
+```js
+function Reservation(props) {
+  const [haveBreakfast, setHaveBreakfast] = useState(true);
+  const [numberOfGuest, setNumberOfGuest] = useState(2);
+
+  const handleSubmit = (event) => {
+    alert(`아침식사 여부: ${haveBreakfast}, 방문객 수: ${numberOfGuest}`);
+    event.preventDefault();
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        아침식사 여부:
+        <input
+          type="checkbox"
+          checked={haveBreakfast}
+          onChange={(event)=>{
+            setHaveBreakFast(event.target.checked);
+          }}
+        />
+      </label>
+      <br />
+      <label>
+        방문객 수:
+        <input
+          type="number"
+          value={numberOfGuest}
+          onChange={(event) => {
+            setNumberOfGuest(event.target.value);
+          }}
+        />
+      </label>
+      <button type="submit">제출</button>
+    </form>
+  );
+}
+```
+\* 함수 컴포넌트에서는 각 state의 변수마다 set 함수가 따로 존재하기 때문에 위와 같은 형태로 각각의 set 함수를 사용해서 구현
+
+<br>
+
+### 📚 Input Null Value
+**Input Null Value** : 제어 컴포넌트에 value prop을 정해진 값으로 넣으면 코드를 수정하지 않는 한 입력값 변경 불가능. 만약 value porp을 넣되 자유롭게 입력할 수 있게 만들고 싶다면 값에 undefined 또는 null을 넣어주면 됨
+
+```js
+ReactDOM.render(<input value="hi" />, rootNode);
+
+setTimeout(function() {
+  ReactDOM.render(<input value={null} />, rootNode);
+}, 1000);
+```
+
+<br>
+
+### 💻 11.8 실습 : 사용자 정보 입력받기
+**AttendanceBook.jsx (id값 X)**
+```js
+import React, { useState } from "react";
+
+function SignUp(props) {
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("남자");
+
+  const handleChangeName = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleChangeGender = (event) => {
+    setGender(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    alert(`이름 : ${name}, 성별 : ${gender}`);
+    event.preventDefault();
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        이름 :
+        <input type="text" value={name} onChange={handleChangeName} />
+      </label> <br/>
+        성별 : 
+        <select value={gender} onChange={handleChangeGender}>
+          <option value="남자">남자</option>
+          <option value="여자">여자</option>
+        </select>
+      <button type="submit">제출</button>
+    </form>
+  );
+}
+
+export default SignUp;
+```
+
+**결과** : 
+
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/11.8_result.PNG" width="300"/>
+
+<br><hr><br>
+
+
+
 ## 04.27 9주차
 ### 📚 이벤트 처리
 **DOM에서 클릭 이벤트 처리** :
