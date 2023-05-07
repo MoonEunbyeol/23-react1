@@ -116,7 +116,7 @@ export default AttendanceBook;
 
 **결과** : key props가 없기 때문에 에러 발생
 
-<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/10.5_error_result.PNG" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/10.5_error_result.PNG" width="400"/>
 
 **AttendanceBook.jsx (id 및 key 추가)**
 ```js
@@ -156,7 +156,7 @@ export default AttendanceBook;
 
 **결과** : 
 
-<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/10.5_result.PNG" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/10.5_result.PNG" width="400"/>
 
 <br>
 
@@ -390,7 +390,7 @@ export default SignUp;
 
 **결과** : 
 
-<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/11.8_result.PNG" width="300"/>
+<img src="https://github.com/MoonEunbyeol/23-react1/blob/master/src/image/10week/11.8_result.PNG" width="400"/>
 
 <br><hr><br>
 
