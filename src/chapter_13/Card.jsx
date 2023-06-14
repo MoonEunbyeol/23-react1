@@ -1,5 +1,5 @@
 function Card(props) {
-  const { title, backgroundColor, children } = props;
+  const { title, backgroundColor, children } = props; 
 
   return (
     <div
@@ -18,3 +18,6 @@ function Card(props) {
 }
 
 export default Card;
+
+// children 사용 부분 : Containment 합성 방법
+// title과 background 사용 부분 : Specialization 합성 방법

@@ -1,6 +1,6 @@
 import React from "react";
 
-const ThemeContext = React.createContext(); // useState를 사용하는 경우 초기값 안넣어줘도 됨
+const ThemeContext = React.createContext(); // 테마를 위한 컨텍스트. useState를 사용하는 경우 초기값 안넣어줘도 됨
 ThemeContext.displayName = "ThemeContext";
 
 export default ThemeContext;

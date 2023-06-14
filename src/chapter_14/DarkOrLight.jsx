@@ -13,11 +13,14 @@ function DarkOrLight(props) {
     }
   }, [theme]);
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+  return ( 
+    <ThemeContext.Provider value={{ theme, toggleTheme }}> 
       <MainContent />
     </ThemeContext.Provider>
   );
 }
 
 export default DarkOrLight;
+
+// 17행 Context.Provider 컴포넌트로 하위 컴포넌트들을 감싸주면 하위 컴포넌트들이 해당 컨텍스트 데이터에 접근 가능
+// ThemeContext의 값을 하위 컴포넌트인 MainContent가 사용(접근)할 수 있도록 함 

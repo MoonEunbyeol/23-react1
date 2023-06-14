@@ -12,7 +12,7 @@ function LandingPage(props) {
     setIsLoggedIn(false);
   };
 
-  return (
+  return ( // props로 넘김. 이름 동일해야 함
     <div>
       <Toolbar
         isLoggedIn={isLoggedIn}

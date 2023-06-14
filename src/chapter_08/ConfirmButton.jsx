@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-function ConfirmButton(props) {
+function ConfirmButton(props) { // 함수 컴포넌트로 구현
   const [isConfirmed, setIsConfirmed] = useState(false);
 
     const handleConfirm = () => {
